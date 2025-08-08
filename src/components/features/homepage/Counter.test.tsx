@@ -1,8 +1,28 @@
 import { describe, it, expect } from 'vitest';
-import Counter from './Counter';
+import { renderHook, act } from '@testing-library/react';
+import useCounter from '../../../hooks/features/homepage/useCounter';
 
-describe('Counter Component', () => {
-    it('renders correctly', () => {
-        expect(true).toBe(true);
+describe('useCounter', () => {
+  it('should initialize with count 0 and val 1', () => {
+    const { result } = renderHook(() => useCounter());
+    expect(result.current.count).toBe(0);
+    expect(result.current.val).toBe(1);
+  });
+
+  it('should increment count by val', () => {
+    const { result } = renderHook(() => useCounter());
+    act(() => {
+      result.current.increment();
     });
+    expect(result.current.count).toBe(1);
+  });
+
+  it('should update val and increment by new val', () => {
+    const { result } = renderHook(() => useCounter());
+    act(() => {
+      result.current.setVal(5);
+      result.current.increment();
+    });
+    expect(result.current.count).toBe(5);
+  });
 });
